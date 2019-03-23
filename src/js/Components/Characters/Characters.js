@@ -13,10 +13,12 @@ export default class Characters extends Component {
   }
 
   init() {
-    ['prepareData']
+    ['prepareData', 'showCharCard']
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.state = {
       apiData : null,
+      img: null,
+      name: null,
 
     }
 
@@ -28,13 +30,30 @@ export default class Characters extends Component {
       this.updateState(this.state.apiData);
     });
   }
+  showCharCard() {
 
+   AppState.update('SHOWTIME', {
+      img: this.state.img
+    });
+  }
 
   render() {
 
     if(this.state.apiData) {
-    console.log(this.state.apiData.results)
-      return this.state.apiData.results.map(elem => {
+      console.log(this.state.apiData);
+    const arr = this.state.apiData.results.map(item => {
+      //this.state.img = item.image;
+      return item.name
+    })
+      return arr.map(item => {
+        return {
+          tag: 'div',
+          classList: ['char'],
+          content: item,
+          eventHandlers: {
+            click: this.showCharCard,
+        },
+        }
       })
     } else {
       return 'OH NOOOO!'
