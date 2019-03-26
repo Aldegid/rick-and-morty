@@ -1,69 +1,55 @@
 import Component from "../../framework/Component";
-import AppState from "../../Services/AppState";
 import DataService from "../../Services/DataService"
 
+export default class Users extends Component {
 
-
-export default class Characters extends Component {
-  constructor(host, props) {
-    super(host, props);
-    this.prepareData();
-    AppState.watch('SHOWTIME', this.updateMyself);
-
-
-  }
-
-  init() {
-    ['prepareData','updateMyself']
-    .forEach(methodName => this[methodName] = this[methodName].bind(this));
-    this.state = {
-      apiData : null,
-      img: null
+    constructor(host, props) {
+        super(host, props);
+        console.log(props);
+        this.userId = props.id - 1;
+        this.prepareData();
 
     }
 
-  }
+    init() {
+      ['prepareData']
+      .forEach(methodName => this[methodName] = this[methodName].bind(this));
+      this.state = {
+        apiData : null,
 
-  prepareData() {
-    DataService.getCharacters().then(data => {
-      this.state.apiData = data;
-      this.updateState(this.state.apiData);
-    });
-  }
-
-   updateMyself(subState) {
-    // .... transform response
-    console.log('PNumber in CountControls', subState);
-    // do update
-    this.updateState(subState);
-  }
-
-
-
-  render() {
-    if(this.state.id) {
-      if(this.state.apiData) {
-        console.log(this.state.apiData.results[this.state.id]);
-        const currentPerson = this.state.apiData.results[this.state.id];
-        return {
-          tag: 'div',
-          classList: ['card'],
-          content: `
-          <img src="${currentPerson.image}">
-          <p class="card__item name">${currentPerson.name}</p>
-          <p class="card__item">Gender: ${currentPerson.gender}</p>
-          <p class="card__item">${currentPerson.species}</p>
-          <p class="card__item">Location: ${currentPerson.location.name}</p>
-          `
-
-        }
-
-      } else {
-        return 'LOADING...'
       }
-    } else {
-      return `<h1 class="h2">Select a character to get information about him</h1>`
+
     }
 
-  }
+
+    prepareData() {
+      DataService.getCharacters().then(data => {
+        this.state.apiData = data;
+        this.updateState(this.state.apiData);
+      });
+    }
+
+
+    render() {
+        if(this.state.apiData) {
+          console.log(this.state.apiData.results[this.userId]);
+          const currentPerson = this.state.apiData.results[this.userId];
+          return {
+            tag: 'div',
+            classList: ['card', 'card-img-top'],
+            content: `
+            <img src="${currentPerson.image}">
+            <p class="card__item name">${currentPerson.name}</p>
+            <p class="card__item">${currentPerson.gender}</p>
+            <p class="card__item">${currentPerson.species}</p>
+            <p class="card__item">Location: ${currentPerson.location.name}</p>
+            `
+
+          }
+
+        } else {
+          return 'LOADING...'
+        }
+    }
+
 }

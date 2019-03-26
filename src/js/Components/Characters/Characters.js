@@ -10,15 +10,17 @@ export default class Characters extends Component {
     this.prepareData();
 
 
+
   }
 
   init() {
-    ['prepareData', 'showCharCard']
+    ['prepareData']
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.state = {
       apiData : null,
+      img: [],
+      name: null,
       id: null,
-
     }
 
   }
@@ -27,13 +29,6 @@ export default class Characters extends Component {
     DataService.getCharacters().then(data => {
       this.state.apiData = data;
       this.updateState(this.state.apiData);
-    });
-  }
-  showCharCard(e) {
-    //console.log(e.target.getAttribute('data-id'));
-   AppState.update('SHOWTIME', {
-      img: this.state.img,
-      id: e.target.getAttribute('data-id')
     });
   }
 
@@ -45,24 +40,16 @@ export default class Characters extends Component {
 
       return arr.map(item => {
        // console.log(item)
-        return {
-          tag: 'div',
-          eventHandlers: {
-            click: this.showCharCard,
-        },
-          children: [
-            {
-              tag: 'div',
-              classList: ['char'],
-              content: item.name,
-              attributes: [{
-                name: 'data-id',
-                value: item.id - 1
-              }
-              ]
-
-            }
+        return             {
+          tag: 'a',
+          classList: ['char'],
+          content: item.name,
+          attributes: [{
+            name: 'href',
+            value: `#/char/${item.id}`
+          }
           ]
+
         }
       })
     } else {
