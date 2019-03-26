@@ -7,13 +7,14 @@ import DataService from "../../Services/DataService"
 export default class Characters extends Component {
   constructor(host, props) {
     super(host, props);
+    this.prepareData();
     AppState.watch('SHOWTIME', this.updateMyself);
 
 
   }
 
   init() {
-    ['updateMyself']
+    ['prepareData','updateMyself']
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.state = {
       apiData : null,
@@ -22,6 +23,14 @@ export default class Characters extends Component {
     }
 
   }
+
+  prepareData() {
+    DataService.getCharacters().then(data => {
+      this.state.apiData = data;
+      this.updateState(this.state.apiData);
+    });
+  }
+
    updateMyself(subState) {
     // .... transform response
     console.log('PNumber in CountControls', subState);
@@ -32,11 +41,29 @@ export default class Characters extends Component {
 
 
   render() {
-    return [ 
-    {
-      tag: 'div',
-      content: `<img src="${this.state.img}">`
+    if(this.state.id) {
+      if(this.state.apiData) {
+        console.log(this.state.apiData.results[this.state.id]);
+        const currentPerson = this.state.apiData.results[this.state.id];
+        return {
+          tag: 'div',
+          classList: ['card', 'card-img-top'],
+          content: `
+          <img src="${currentPerson.image}">
+          <p class="card__item name">${currentPerson.name}</p>
+          <p class="card__item">${currentPerson.gender}</p>
+          <p class="card__item">${currentPerson.species}</p>
+          <p class="card__item">Location: ${currentPerson.location.name}</p>
+          `
+
+        }
+
+      } else {
+        return 'LOADING...'
+      }
+    } else {
+      return `<h2 class="h2">Select a character to get information about him</h2>`
     }
-    ]
+
   }
 }

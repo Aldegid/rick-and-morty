@@ -16,25 +16,32 @@ export default class App extends Component {
 
       {
         tag: 'div',
-        classList: ['container'],
+        classList: ['container-fluid'],
         children: [
           {
             tag: 'div',
             classList: ['row'],
             children: [{
               tag: 'div',
-              classList: ['col-4'],
+              classList: ['col-5', 'col-sm-4'],
               children: [
                 {
-                  tag: Characters
-                },
+                  tag: Characters,
+                }
+              ]
+
+            },
+            {
+              tag: 'div',
+              classList: ['col-7', 'col-sm-8'],
+              children: [
                 {
                   tag: CharacterCard
                 }
               ]
-
-            }]
-          }
+            }
+          ]
+          },
         ]
       }
 

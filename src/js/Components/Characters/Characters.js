@@ -17,8 +17,9 @@ export default class Characters extends Component {
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.state = {
       apiData : null,
-      img: null,
+      img: [],
       name: null,
+      id: null,
 
     }
 
@@ -30,33 +31,44 @@ export default class Characters extends Component {
       this.updateState(this.state.apiData);
     });
   }
-  showCharCard() {
-
+  showCharCard(e) {
+    //console.log(e.target.getAttribute('data-id'));
    AppState.update('SHOWTIME', {
-      img: this.state.img
+      img: this.state.img,
+      id: e.target.getAttribute('data-id')
     });
   }
 
   render() {
 
     if(this.state.apiData) {
-      console.log(this.state.apiData);
-    const arr = this.state.apiData.results.map(item => {
-      //this.state.img = item.image;
-      return item.name
-    })
+      //console.log(this.state.apiData);
+    const arr = this.state.apiData.results;
+
       return arr.map(item => {
+       // console.log(item)
         return {
           tag: 'div',
-          classList: ['char'],
-          content: item,
           eventHandlers: {
             click: this.showCharCard,
         },
+          children: [
+            {
+              tag: 'div',
+              classList: ['char'],
+              content: item.name,
+              attributes: [{
+                name: 'data-id',
+                value: item.id - 1
+              }
+              ]
+
+            }
+          ]
         }
       })
     } else {
-      return 'OH NOOOO!'
+      return `'LOADING...!'`
     }
   }
 }
