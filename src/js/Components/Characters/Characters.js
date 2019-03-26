@@ -17,8 +17,6 @@ export default class Characters extends Component {
     .forEach(methodName => this[methodName] = this[methodName].bind(this));
     this.state = {
       apiData : null,
-      img: [],
-      name: null,
       id: null,
 
     }

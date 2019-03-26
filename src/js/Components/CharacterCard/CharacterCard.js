@@ -47,11 +47,11 @@ export default class Characters extends Component {
         const currentPerson = this.state.apiData.results[this.state.id];
         return {
           tag: 'div',
-          classList: ['card', 'card-img-top'],
+          classList: ['card'],
           content: `
           <img src="${currentPerson.image}">
           <p class="card__item name">${currentPerson.name}</p>
-          <p class="card__item">${currentPerson.gender}</p>
+          <p class="card__item">Gender: ${currentPerson.gender}</p>
           <p class="card__item">${currentPerson.species}</p>
           <p class="card__item">Location: ${currentPerson.location.name}</p>
           `
@@ -62,7 +62,7 @@ export default class Characters extends Component {
         return 'LOADING...'
       }
     } else {
-      return `<h2 class="h2">Select a character to get information about him</h2>`
+      return `<h1 class="h2">Select a character to get information about him</h1>`
     }
 
   }
